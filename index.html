@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -573,118 +534,114 @@
         </div>
     </section>
 
-<!-- Team Section -->
-    <section id="team" class="py-24 bg-gray-50">
+    <!-- Team Section -->
+    <section id="team" class="section bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center fade-in">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Experts</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12">Meet the dedicated professionals leading our research initiatives.</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center" data-aos="fade-up">Team</h2>
+            <div class="flex justify-center mb-8" data-aos="fade-up" data-aos-delay="100">
+                <button class="tab-button px-6 py-2 mx-2 text-gray-600 bg-gray-200 rounded-full hover:bg-blue-600 hover:text-white active" data-tab="guide">Guide</button>
+                <button class="tab-button px-6 py-2 mx-2 text-gray-600 bg-gray-200 rounded-full hover:bg-blue-600 hover:text-white" data-tab="scholars">Research Scholars</button>
+                <button class="tab-button px-6 py-2 mx-2 text-gray-600 bg-gray-200 rounded-full hover:bg-blue-600 hover:text-white" data-tab="staff">Staff</button>
             </div>
-            <div class="fade-in">
-                <!-- Tabs -->
-                <div class="flex justify-center space-x-4 mb-8">
-                    <button class="tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-100 hover:bg-gray-200 active" data-tab="guide">Guide</button>
-                    <button class="tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-100 hover:bg-gray-200" data-tab="scholars">Research Scholars</button>
-                    <button class="tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-100 hover:bg-gray-200" data-tab="staff">Staff</button>
-                </div>
-                <!-- Tab Content -->
-                <div id="guide" class="tab-content active">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                            <h3 class="text-xl font-semibold text-gray-900">Dr. Jane Doe</h3>
-                            <p class="text-gray-600">Principal Investigator</p>
-                        </div>
+            <div id="guide" class="tab-content active" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" alt="Guide" class="w-24 h-24 rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Dr. John Doe</h3>
+                        <p class="text-gray-600">Principal Investigator</p>
+                    </div>
+                    <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Guide" class="w-24 h-24 rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Dr. Jane Smith</h3>
+                        <p class="text-gray-600">Co-Guide</p>
                     </div>
                 </div>
-                <div id="scholars" class="tab-content">
-                    <!-- Sub-Tabs for Research Scholars -->
-                    <div class="flex justify-center space-x-4 mb-8">
-                        <button class="sub-tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-200 hover:bg-gray-300 active" data-sub-tab="phd">Ph.D</button>
-                        <button class="sub-tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-200 hover:bg-gray-300" data-sub-tab="ms">MS</button>
+            </div>
+            <div id="scholars" class="tab-content" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex justify-center mb-6">
+                    <button class="subtab-button px-4 py-2 mx-2 text-gray-600 bg-gray-300 rounded-full hover:bg-blue-800 hover:text-white active" data-subtab="phd">Ph.D.</button>
+                    <button class="subtab-button px-4 py-2 mx-2 text-gray-600 bg-gray-300 rounded-full hover:bg-blue-800 hover:text-white" data-subtab="ms">MS</button>
+                </div>
+                <div id="phd" class="subtab-content active">
+                    <div class="flex justify-center mb-6">
+                        <button class="subtab-button px-4 py-2 mx-2 text-gray-600 bg-gray-300 rounded-full hover:bg-blue-800 hover:text-white active" data-subtab="phd-ongoing">Ongoing</button>
+                        <button class="subtab-button px-4 py-2 mx-2 text-gray-600 bg-gray-300 rounded-full hover:bg-blue-800 hover:text-white" data-subtab="phd-alumni">Alumni</button>
                     </div>
-                    <!-- Sub-Tab Content -->
-                    <div id="phd" class="sub-tab-content active">
-                        <div class="flex justify-center space-x-4 mb-8">
-                            <button class="sub-tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-200 hover:bg-gray-300 active" data-sub-tab="phd-ongoing">Ongoing</button>
-                            <button class="sub-tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-200 hover:bg-gray-300" data-sub-tab="phd-alumni">Alumni</button>
-                        </div>
-                        <div id="phd-ongoing" class="sub-tab-content active">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">Alex Carter</h3>
-                                    <p class="text-gray-600">Ph.D Candidate</p>
-                                </div>
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">Sarah Lee</h3>
-                                    <p class="text-gray-600">Ph.D Candidate</p>
-                                </div>
+                    <div id="phd-ongoing" class="subtab-content active">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">Alice Johnson</h3>
+                                <p class="text-gray-600">Ph.D. Candidate (AI & Machine Learning)</p>
                             </div>
-                        </div>
-                        <div id="phd-alumni" class="sub-tab-content">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">David Kim</h3>
-                                    <p class="text-gray-600">Ph.D (Graduated 2023)</p>
-                                </div>
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">Lisa Patel</h3>
-                                    <p class="text-gray-600">Ph.D (Graduated 2022)</p>
-                                </div>
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1519085360753-afccb1f7b3b1" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">Bob Lee</h3>
+                                <p class="text-gray-600">Ph.D. Candidate (Sustainable Technologies)</p>
                             </div>
                         </div>
                     </div>
-                    <div id="ms" class="sub-tab-content">
-                        <div class="flex justify-center space-x-4 mb-8">
-                            <button class="sub-tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-200 hover:bg-gray-300 active" data-sub-tab="ms-ongoing">Ongoing</button>
-                            <button class="sub-tab px-6 py-2 rounded-md font-medium text-gray-800 bg-gray-200 hover:bg-gray-300" data-sub-tab="ms-alumni">Alumni</button>
-                        </div>
-                        <div id="ms-ongoing" class="sub-tab-content active">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">Rachel Wong</h3>
-                                    <p class="text-gray-600">MS Student</p>
-                                </div>
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">James Liu</h3>
-                                    <p class="text-gray-600">MS Student</p>
-                                </div>
+                    <div id="phd-alumni" class="subtab-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">Dr. Emma Davis</h3>
+                                <p class="text-gray-600">Ph.D. 2023 (Biomedical Research)</p>
                             </div>
-                        </div>
-                        <div id="ms-alumni" class="sub-tab-content">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1506794778202-6d103f6e0e0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">Mark Chen</h3>
-                                    <p class="text-gray-600">MS (Graduated 2023)</p>
-                                </div>
-                                <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                                    <img src="https://images.unsplash.com/photo-1517365830460-955ce3f6b1f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                                    <h3 class="text-xl font-semibold text-gray-900">Anita Sharma</h3>
-                                    <p class="text-gray-600">MS (Graduated 2022)</p>
-                                </div>
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">Dr. Michael Chen</h3>
+                                <p class="text-gray-600">Ph.D. 2022 (AI & Machine Learning)</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="staff" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                            <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                            <h3 class="text-xl font-semibold text-gray-900">Michael Brown</h3>
-                            <p class="text-gray-600">Lab Manager</p>
+                <div id="ms" class="subtab-content">
+                    <div class="flex justify-center mb-6">
+                        <button class="subtab-button px-4 py-2 mx-2 text-gray-600 bg-gray-300 rounded-full hover:bg-blue-800 hover:text-white active" data-subtab="ms-ongoing">Ongoing</button>
+                        <button class="subtab-button px-4 py-2 mx-2 text-gray-600 bg-gray-300 rounded-full hover:bg-blue-800 hover:text-white" data-subtab="ms-alumni">Alumni</button>
+                    </div>
+                    <div id="ms-ongoing" class="subtab-content active">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">Sarah Kim</h3>
+                                <p class="text-gray-600">MS Student (Sustainable Technologies)</p>
+                            </div>
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">David Patel</h3>
+                                <p class="text-gray-600">MS Student (Biomedical Research)</p>
+                            </div>
                         </div>
-                        <div class="card bg-white rounded-xl shadow-md p-6 text-center">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member" class="w-28 h-28 rounded-full mx-auto mb-4">
-                            <h3 class="text-xl font-semibold text-gray-900">Emma Wilson</h3>
-                            <p class="text-gray-600">Administrative Assistant</p>
+                    </div>
+                    <div id="ms-alumni" class="subtab-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">Lisa Wong</h3>
+                                <p class="text-gray-600">MS 2023 (AI & Machine Learning)</p>
+                            </div>
+                            <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                                <img src="https://images.unsplash.com/photo-1519085360753-afccb1f7b3b1" alt="Scholar" class="w-24 h-24 rounded-full mx-auto mb-4">
+                                <h3 class="text-xl font-semibold text-gray-800">James Carter</h3>
+                                <p class="text-gray-600">MS 2022 (Sustainable Technologies)</p>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div id="staff" class="tab-content" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e" alt="Staff" class="w-24 h-24 rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">David Patel</h3>
+                        <p class="text-gray-600">Research Assistant</p>
+                    </div>
+                    <div class="team-card bg-white p-6 rounded-lg shadow-lg text-center">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb" alt="Staff" class="w-24 h-24 rounded-full mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Lisa Wong</h3>
+                        <p class="text-gray-600">Lab Technician</p>
                     </div>
                 </div>
             </div>
@@ -772,36 +729,6 @@
             newsCarousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
         });
 
-
-        // Tab functionality for both Publications and Team
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const section = tab.closest('section');
-                section.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                section.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                section.querySelector(`#${tab.dataset.tab}`).classList.add('active');
-            });
-        });
-
-        // Sub-tab functionality for Research Scholars (Ph.D and MS)
-        const subTabs = document.querySelectorAll('.sub-tab');
-        const subTabContents = document.querySelectorAll('.sub-tab-content');
-
-        subTabs.forEach(subTab => {
-            subTab.addEventListener('click', () => {
-                const parent = subTab.closest('.sub-tab-content') || subTab.closest('.tab-content');
-                parent.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
-                parent.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
-                subTab.classList.add('active');
-                parent.querySelector(`#${subTab.dataset.subTab}`).classList.add('active');
-            });
-        });
-
-            
         // Tab Functionality for Publications and Team
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -819,7 +746,22 @@
                 const subtabContents = document.querySelectorAll(`#${tabId} .subtab-content`);
                 subtabButtons.forEach(btn => btn.classList.remove('active'));
                 subtabContents.forEach(content => content.classList.remove('active'));
-                if (subtabButtons.length > 0) {
+                if (subtabButtons.length > 0 && tabId === 'scholars') {
+                    // For scholars tab, handle nested subtabs
+                    const firstLevelSubtab = subtabButtons[0]; // e.g., 'phd'
+                    firstLevelSubtab.classList.add('active');
+                    document.getElementById(firstLevelSubtab.getAttribute('data-subtab')).classList.add('active');
+
+                    // Activate the first nested subtab (e.g., phd-ongoing)
+                    const nestedSubtabButtons = document.querySelectorAll(`#${firstLevelSubtab.getAttribute('data-subtab')} .subtab-button`);
+                    const nestedSubtabContents = document.querySelectorAll(`#${firstLevelSubtab.getAttribute('data-subtab')} .subtab-content`);
+                    nestedSubtabButtons.forEach(btn => btn.classList.remove('active'));
+                    nestedSubtabContents.forEach(content => content.classList.remove('active'));
+                    if (nestedSubtabButtons.length > 0) {
+                        nestedSubtabButtons[0].classList.add('active');
+                        nestedSubtabContents[0].classList.add('active');
+                    }
+                } else if (subtabButtons.length > 0) {
                     subtabButtons[0].classList.add('active');
                     subtabContents[0].classList.add('active');
                 }
@@ -832,14 +774,37 @@
 
         subtabButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const subtabId = button.getAttribute('data-subtab'); // Corrected to use data-subtab
+                const subtabId = button.getAttribute('data-subtab');
                 const parentTab = button.closest('.tab-content').id;
-                const relatedSubtabButtons = document.querySelectorAll(`#${parentTab} .subtab-button`);
-                const relatedSubtabContents = document.querySelectorAll(`#${parentTab} .subtab-content`);
-                relatedSubtabButtons.forEach(btn => btn.classList.remove('active'));
-                relatedSubtabContents.forEach(content => content.classList.remove('active'));
-                button.classList.add('active');
-                document.getElementById(subtabId).classList.add('active');
+                let relatedSubtabButtons, relatedSubtabContents;
+
+                // If the button is within the 'scholars' tab (e.g., phd or ms), handle nested subtabs
+                if (parentTab === 'scholars') {
+                    relatedSubtabButtons = document.querySelectorAll(`#${parentTab} .subtab-button`); // phd, ms
+                    relatedSubtabContents = document.querySelectorAll(`#${parentTab} .subtab-content`); // phd, ms
+                    relatedSubtabButtons.forEach(btn => btn.classList.remove('active'));
+                    relatedSubtabContents.forEach(content => content.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById(subtabId).classList.add('active');
+
+                    // Activate the first nested subtab (ongoing or alumni) for the selected phd/ms
+                    const nestedSubtabButtons = document.querySelectorAll(`#${subtabId} .subtab-button`);
+                    const nestedSubtabContents = document.querySelectorAll(`#${subtabId} .subtab-content`);
+                    nestedSubtabButtons.forEach(btn => btn.classList.remove('active'));
+                    nestedSubtabContents.forEach(content => content.classList.remove('active'));
+                    if (nestedSubtabButtons.length > 0) {
+                        nestedSubtabButtons[0].classList.add('active');
+                        nestedSubtabContents[0].classList.add('active');
+                    }
+                } else {
+                    // For other tabs (e.g., journal, conference, patents, guide, staff)
+                    relatedSubtabButtons = document.querySelectorAll(`#${parentTab} .subtab-button`);
+                    relatedSubtabContents = document.querySelectorAll(`#${parentTab} .subtab-content`);
+                    relatedSubtabButtons.forEach(btn => btn.classList.remove('active'));
+                    relatedSubtabContents.forEach(content => content.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById(subtabId).classList.add('active');
+                }
             });
         });
     </script>
