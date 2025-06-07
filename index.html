@@ -609,9 +609,43 @@
             });
         });
 
+        
         // Tab functionality for both Publications and Team
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+
+                // Reset subtabs to show first subtab for Publications or Team
+                const subtabButtons = document.querySelectorAll(`#${tabId} .subtab-button`);
+                const subtabContents = document.querySelectorAll(`#${tabId} .subtab-content`);
+                subtabButtons.forEach(btn => btn.classList.remove('active'));
+                subtabContents.forEach(content => content.classList.remove('active'));
+                if (subtabButtons.length > 0) {
+                    subtabButtons[0].classList.add('active');
+                    subtabContents[0].classList.add('active');
+
+                    // For scholars tab, initialize nested subtabs
+                    if (tabId === 'scholars') {
+                        const nestedSubtabButtons = document.querySelectorAll(`#${subtabButtons[0].getAttribute('data-subtab')} .subtab-button`);
+                        const nestedSubtabContents = document.querySelectorAll(`#${subtabButtons[0].getAttribute('data-subtab')} .subtab-content`);
+                        nestedSubtabButtons.forEach(btn => btn.classList.remove('active'));
+                        nestedSubtabContents.forEach(content => content.classList.remove('active'));
+                        if (nestedSubtabButtons.length > 0) {
+                            nestedSubtabButtons[0].classList.add('active');
+                            nestedSubtabContents[0].classList.add('active');
+                        }
+                    }
+                }
+            });
+        });
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
