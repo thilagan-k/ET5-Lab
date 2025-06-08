@@ -928,14 +928,26 @@
         let currentSlide = 0;
 
         function showSlide(index) {
-            carouselInner.style.transform = `translateX(-${index * 80}%)`;
+            if (index >= slides.length) {
+                index = 0;
+            } else if (index < 0) {
+                index = slides.length - 1;
+            }
+            carouselInner.style.transform = `translateX(-${index * 100}%)`;
             dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
             currentSlide = index;
+
+            // Update image sources if placeholders are present
+            slides.forEach((slide, i) => {
+                const img = slide.querySelector('img');
+                if (img && img.src === '#' && img.dataset.placeholder) {
+                    img.src = img.dataset.placeholder; // Fallback to placeholder if no upload
+                }
+            });
         }
 
         function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
+            showSlide(currentSlide + 1);
         }
 
         let autoSlide = setInterval(nextSlide, 5000);
