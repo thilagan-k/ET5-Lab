@@ -928,7 +928,7 @@
         let currentSlide = 0;
 
         function showSlide(index) {
-            carouselInner.style.transform = `translateX(-${index * 100}%)`;
+            carouselInner.style.transform = `translateX(-${index * 80}%)`;
             dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
             currentSlide = index;
         }
